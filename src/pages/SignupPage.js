@@ -24,6 +24,15 @@ const SignupPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [role, setRole] = useState("junior_consultant");
+
+  const roleOptions = [
+    { value: "junior_consultant", label: "Junior Consultant" },
+    { value: "senior_consultant", label: "Senior Consultant" },
+    { value: "knowledge_champion", label: "Knowledge Champion" },
+    { value: "governance_council_member", label: "Governance Council Member" },
+    { value: "system_admin", label: "System Admin" },
+  ];
 
   useEffect(() => {
     const loadRegions = async () => {
@@ -43,7 +52,8 @@ const SignupPage = () => {
     setError("");
     setLoading(true);
     try {
-      await register({ name, email, password, regionId });
+      await register({ name, email, password, regionId, role });
+
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
@@ -93,6 +103,22 @@ const SignupPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <TextField
+            select
+            label="User Type"
+            fullWidth
+            margin="normal"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            required
+          >
+            {roleOptions.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
           <TextField
             select
             label="Region"
